@@ -4,8 +4,11 @@ from bs4 import BeautifulSoup
 
 
 def get_html(url):
-    r = requests.get(url)
-    return r.text
+    user_agent = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:90.0) Gecko/20100101 Firefox/90.0'}
+    r = requests.get(url, headers=user_agent)
+    if r.ok:
+        return r.text
+    print(r.status_code)
 
 
 def write_csv(data):
@@ -56,10 +59,9 @@ def get_page_data(html):
 
 
 def main():
-    f = open('work.csv', 'w')
-    headers = 'Назва, Зарплата, Примітка, Організація, Посилання\n'
-    f.write(headers)
-    f.close()
+    with open('work.csv', 'w') as f:
+        writer = csv.writer(f)
+        writer.writerow(('Назва', 'Зарплата', 'Примітка', 'Організація', 'Посилання'))
 
     url = 'https://www.work.ua/jobs-kyiv/'
     get_page_data(get_html(url))
