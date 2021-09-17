@@ -111,12 +111,9 @@ def main():
     url = 'https://www.work.ua/jobs-kyiv/?page={}'
     urls = [url.format(str(i)) for i in range(1, 2790)]
 
-
-
     with Pool(2) as p:
         p.map(make_all, urls[:65])
         p.map(make_all_65, urls[65:])
-
 
     print(f'Затрачено {time.time() - start_time}')
 
